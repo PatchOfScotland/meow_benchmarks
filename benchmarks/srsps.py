@@ -20,13 +20,13 @@ def single_rule_single_event_sequential(job_count:int, REPEATS:int,
     )
     patterns[pattern.name] = pattern
 
-    recipe = get_recipe_from_notebook("recipe_two", "sequential.ipynb")
+    recipe = get_recipe_from_notebook("recipe_two", "../notebooks/sequential.ipynb")
     
     recipes = {
         recipe.name: recipe
     }
 
-    run_test(
+    return run_test(
         patterns, 
         recipes, 
         1, 

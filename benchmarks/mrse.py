@@ -18,7 +18,7 @@ def multiple_rules_single_event(job_count:int, REPEATS:int, job_counter:int,
         )
         patterns[pattern.name] = pattern
 
-    recipe = get_recipe_from_notebook("recipe_one", "test.ipynb")
+    recipe = get_recipe_from_notebook("recipe_one", "../notebooks/test.ipynb")
     
     recipes = {
         recipe.name: recipe

@@ -131,6 +131,9 @@ def mean(l:List):
 def collate_results(base_dir:str):
     scheduling_delays = []
 
+    if not os.path.exists(base_dir):
+        return
+
     for run in os.listdir(base_dir):
         if run != 'results.txt':
             with open(os.path.join(base_dir, run, "results.txt"), 'r') as f:
@@ -156,6 +159,8 @@ def run_test(patterns:Dict[str,BasePattern], recipes:Dict[str,BaseRecipe],
     if execution:
         os.system("export LC_ALL=C.UTF-8")
         os.system("export LANG=C.UTF-8")
+
+    runner = None
 
     for run in range(repeats):
         # Ensure complete cleanup from previous run
