@@ -1,0 +1,3 @@
+meow_base
+matplotlib
+numpy

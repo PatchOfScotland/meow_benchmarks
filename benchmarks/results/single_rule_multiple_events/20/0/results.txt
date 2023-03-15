@@ -1,0 +1,10 @@
+Job count: 20
+Generation time: 0.00734
+First trigger: 2023-03-15 11:20:06.275633
+First scheduling datetime: 2023-03-15 11:20:07.460263
+Last scheduling datetime: 2023-03-15 11:20:07.506982
+First scheduling unixtime: 1678875607.460263
+First scheduling unixtime: 1678875607.506982
+Scheduling difference (seconds): 0.047
+Initial scheduling delay (seconds): 1.185
+Total scheduling delay (seconds): 1.231
