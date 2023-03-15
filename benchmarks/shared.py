@@ -20,12 +20,12 @@ from meow_base.functionality.file_io import rmtree
 
 RESULTS_DIR = "results"
 BASE = "benchmark_base"
-REPEATS = 3 #10
+REPEATS = 10
 JOBS_COUNTS = [
     10, 20, 30, 40, 50, 
-#    60, 70, 80, 90, 100, 
-#    125, 150, 175, 200, 
-#    250, 300, 400, 500
+    60, 70, 80, 90, 100, 
+    125, 150, 175, 200, 
+    250, 300, 400, 500
 ]
 
 SRME = "single_rule_multiple_events"
@@ -36,11 +36,11 @@ SRSES = "single_rule_single_event_sequential"
 
 TESTS = [ 
     SRME, 
-#    MRSE,
-#    SRSEP, 
-#    MRME,
+    MRSE,
+    SRSEP, 
+    MRME,
 #    # This test will take approx 90% of total time
-#    SRSES 
+    SRSES 
 ]
 
 
