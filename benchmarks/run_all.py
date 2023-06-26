@@ -7,11 +7,10 @@ import os
 
 from typing import List
 
-from meow_base.core.correctness.vars import DEFAULT_JOB_OUTPUT_DIR, \
-    DEFAULT_JOB_QUEUE_DIR
+from meow_base.core.vars import DEFAULT_JOB_OUTPUT_DIR, DEFAULT_JOB_QUEUE_DIR
 from meow_base.functionality.file_io import rmtree
 
-from meow_benchmarks.benchmarks.shared import JOBS_COUNTS, REPEATS, TESTS, MRME, MRSE, SRME, SRSEP, \
+from meow_benchmarks.benchmarks.shared import JOBS_COUNTS, TESTS, MRME, MRSE, SRME, SRSEP, \
     SRSES, RESULTS_DIR, BASE
 from meow_benchmarks.benchmarks.mrme import multiple_rules_multiple_events
 from meow_benchmarks.benchmarks.mrse import multiple_rules_single_event
@@ -34,33 +33,33 @@ def run_tests():
 
     requested_jobs=0
     for job_count in JOBS_COUNTS:
-        requested_jobs += job_count * REPEATS * len(TESTS)
+        requested_jobs += job_count * sum([i[1] for i in TESTS])
     print(f"requested_jobs: {requested_jobs}")
 
     runtime_start=time.time()
   
     job_counter=0
     for job_count in JOBS_COUNTS:
-        for test in TESTS:
+        for test, repeats in TESTS:
             if test == MRME:
-                multiple_rules_multiple_events(job_count, REPEATS, job_counter, requested_jobs, runtime_start)
-                job_counter += job_count * REPEATS
+                multiple_rules_multiple_events(job_count, repeats, job_counter, requested_jobs, runtime_start)
+                job_counter += job_count * repeats
 
             elif test == MRSE:
-                multiple_rules_single_event(job_count, REPEATS, job_counter, requested_jobs, runtime_start)
-                job_counter += job_count * REPEATS
+                multiple_rules_single_event(job_count, repeats, job_counter, requested_jobs, runtime_start)
+                job_counter += job_count * repeats
 
             elif test == SRME:
-                single_rule_multiple_events(job_count, REPEATS, job_counter, requested_jobs, runtime_start)
-                job_counter += job_count * REPEATS
+                single_rule_multiple_events(job_count, repeats, job_counter, requested_jobs, runtime_start)
+                job_counter += job_count * repeats
 
             elif test == SRSEP:
-                single_rule_single_event_parallel(job_count, REPEATS, job_counter, requested_jobs, runtime_start)
-                job_counter += job_count * REPEATS
+                single_rule_single_event_parallel(job_count, repeats, job_counter, requested_jobs, runtime_start)
+                job_counter += job_count * repeats
 
             elif test == SRSES:
-                single_rule_single_event_sequential(job_count, REPEATS, job_counter, requested_jobs, runtime_start)
-                job_counter += job_count * REPEATS
+                single_rule_single_event_sequential(job_count, repeats, job_counter, requested_jobs, runtime_start)
+                job_counter += job_count * repeats
 
     print(f"All tests completed in: {str(time.time()-runtime_start)}")
 
@@ -148,7 +147,7 @@ def make_graphs():
     make_both_plots(
         lines, 
         "../results/result.pdf", 
-        "MiG scheduling overheads on the Threadripper"
+        "MeowRunner scheduling overheads"
     )
 
     average_lines = []
@@ -180,13 +179,13 @@ def make_graphs():
     make_both_plots(
         average_lines, 
         "../results/result_averaged.pdf", 
-        "Per-job MiG scheduling overheads on the Threadripper"
+        "Per-job MeowRunner scheduling overheads"
     )
 
     make_both_plots(
         all_delta_lines, 
         "../results/result_deltas.pdf", 
-        "Difference in per-job MiG scheduling overheads on the Threadripper", 
+        "Difference in per-job MeowRunner scheduling overheads", 
         log=False
     )
 

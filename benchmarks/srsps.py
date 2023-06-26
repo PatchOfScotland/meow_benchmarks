@@ -6,7 +6,7 @@ from meow_base.recipes import get_recipe_from_notebook
 from meow_benchmarks.benchmarks.shared import run_test, SRSES
 
 
-def single_rule_single_event_sequential(job_count:int, REPEATS:int, 
+def single_rule_single_event_sequential(job_count:int, repeats:int, 
         job_counter:int, requested_jobs:int, runtime_start:float)->MeowRunner:
     patterns = {}
     pattern = FileEventPattern(
@@ -31,7 +31,7 @@ def single_rule_single_event_sequential(job_count:int, REPEATS:int,
         recipes, 
         1, 
         job_count,
-        REPEATS, 
+        repeats, 
         job_counter,
         requested_jobs,
         runtime_start,

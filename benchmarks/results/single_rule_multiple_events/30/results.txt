@@ -1,2 +1,0 @@
-Average schedule time: 1.307
-Scheduling times: [1.134, 1.367, 1.421]

@@ -58,10 +58,10 @@ tests/test_data
 tests/job_output
 tests/job_queue
 tests/Backup*
-benchmarking/benchmark_base
-benchmarking/job_output
-benchmarking/job_queue
-benchmarking/result*
+benchmarks/benchmark_base
+benchmarks/job_output
+benchmarks/job_queue
+benchmarks/results/*
 results/*
 
 # hdf5

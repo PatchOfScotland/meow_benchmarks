@@ -6,9 +6,10 @@ import pathlib
 import time
 import yaml
 
+from multiprocessing import Pipe
 from typing import Any, Dict, Tuple, List
 
-from meow_base.core.correctness.vars import DEFAULT_JOB_OUTPUT_DIR, \
+from meow_base.core.vars import DEFAULT_JOB_OUTPUT_DIR, \
     DEFAULT_JOB_QUEUE_DIR
 from meow_base.core.base_pattern import BasePattern
 from meow_base.core.base_recipe import BaseRecipe
@@ -21,6 +22,7 @@ from meow_base.functionality.file_io import rmtree
 RESULTS_DIR = "results"
 BASE = "benchmark_base"
 REPEATS = 10
+SEQ_REPEATS = 3
 JOBS_COUNTS = [
     10, 20, 30, 40, 50, 
     60, 70, 80, 90, 100, 
@@ -35,19 +37,18 @@ MRME = "multiple_rules_multiple_events"
 SRSES = "single_rule_single_event_sequential"
 
 TESTS = [ 
-    SRME, 
-    MRSE,
-    SRSEP, 
-    MRME,
-#    # This test will take approx 90% of total time
-    SRSES 
+    (SRME, REPEATS), 
+    (MRSE, REPEATS),
+    (SRSEP, REPEATS), 
+    (MRME, REPEATS),
+    # This test will take approx 90% of total time
+    (SRSES, SEQ_REPEATS) 
 ]
 
 
 class DummyConductor(LocalPythonConductor):
     def valid_execute_criteria(self, job:Dict[str,Any])->Tuple[bool,str]:
         return False, ">:("
-
 
 def datetime_to_timestamp(date_time_obj:datetime):
     return time.mktime(date_time_obj.timetuple()) \
@@ -105,7 +106,7 @@ def cleanup(jobs:List[str], file_out:str, base_time:float, gen_time:float,
         f_out.write("First scheduling datetime: "+ str(first[1]) +"\n")
         f_out.write("Last scheduling datetime: "+ str(last[1]) +"\n")
         f_out.write("First scheduling unixtime: "+ str(first[0]) +"\n")
-        f_out.write("First scheduling unixtime: "+ str(last[0]) +"\n")
+        f_out.write("Last scheduling unixtime: "+ str(last[0]) +"\n")
         f_out.write("Scheduling difference (seconds): "+ str(round(last[0] - first[0], 3)) +"\n")
         f_out.write("Initial scheduling delay (seconds): "+ str(round(first[0] - os.path.getctime(base_time), 3)) +"\n")
         total_time = round(last[0] - os.path.getctime(base_time), 3)
@@ -171,24 +172,30 @@ def run_test(patterns:Dict[str,BasePattern], recipes:Dict[str,BaseRecipe],
         file_base = os.path.join(BASE, 'testing')
         pathlib.Path(file_base).mkdir(parents=True, exist_ok=True)
 
-        runner_debug_stream = io.StringIO("")
+        HtT_handler, HtT_test = Pipe(duplex=True)
+        TtR_test, TtR_runner = Pipe(duplex=True)
+
+        handler = PapermillHandler()
 
         if execution:
             runner = MeowRunner(
                 WatchdogMonitor(BASE, patterns, recipes, settletime=1),
-                PapermillHandler(),
+                handler,
                 LocalPythonConductor(),
-                print=runner_debug_stream,
-                logging=3
+                logging=0
             )
         else:
             runner = MeowRunner(
                 WatchdogMonitor(BASE, patterns, recipes, settletime=1),
-                PapermillHandler(),
+                handler,
                 DummyConductor(),
-                print=runner_debug_stream,
-                logging=3
+                logging=0
             )
+
+        handler.to_runner_job = HtT_handler
+
+        runner.job_connections = [i for i in runner.job_connections if i[1] != handler]
+        runner.job_connections.append((TtR_runner, handler))
 
         runner.start()
 
@@ -196,23 +203,19 @@ def run_test(patterns:Dict[str,BasePattern], recipes:Dict[str,BaseRecipe],
         first_filename, generation_duration = \
             generate(files_count, file_base +"/file_")
 
-        idle_loops = 0
-        total_loops = 0
-        messages = 0
-        total_time = expected_job_count * 3
+        timeout = 10
         if execution:
-            total_time = expected_job_count * 5
-        while idle_loops < 10 and total_loops < total_time:
-            time.sleep(1)
-            runner_debug_stream.seek(0)
-            new_messages = len(runner_debug_stream.readlines())
-
-            if messages == new_messages:               
-                idle_loops += 1
+            timeout = 30
+        for _ in range(expected_job_count):
+            if HtT_test.poll(timeout):
+                msg = HtT_test.recv()
+                TtR_test.send(msg)
             else:
-                idle_loops = 0
-                messages = new_messages
-            total_loops += 1
+                print("Could not run enough jobs")
+                exit()
+
+        if execution:
+            time.sleep(timeout)
 
         runner.stop()
 
