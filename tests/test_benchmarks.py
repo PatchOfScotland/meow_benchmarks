@@ -6,8 +6,8 @@ from meow_base.patterns.file_event_pattern import FileEventPattern, \
     WatchdogMonitor
 from meow_base.recipes.jupyter_notebook_recipe import JupyterNotebookRecipe, \
     PapermillHandler
-from meow_base.core.correctness.vars import DEFAULT_JOB_OUTPUT_DIR, \
-    DEFAULT_JOB_QUEUE_DIR, META_FILE, PARAMS_FILE, SWEEP_JUMP, SWEEP_START, \
+from meow_base.core.vars import DEFAULT_JOB_OUTPUT_DIR, \
+    DEFAULT_JOB_QUEUE_DIR, META_FILE, JOB_FILE, SWEEP_JUMP, SWEEP_START, \
     SWEEP_STOP
 from meow_base.conductors.local_python_conductor import LocalPythonConductor
 from meow_base.functionality.file_io import read_notebook, rmtree
@@ -94,9 +94,11 @@ class MultipleRulesMultipleEventsTests(unittest.TestCase):
         for job in os.listdir(DEFAULT_JOB_QUEUE_DIR):
             job_dir = os.path.join(DEFAULT_JOB_QUEUE_DIR, job)
 
-            self.assertTrue(os.path.exists(os.path.join(job_dir, "base.ipynb")))
+            print(os.listdir(job_dir))
+
+            self.assertTrue(os.path.exists(os.path.join(job_dir, "recipe.ipynb")))
             self.assertTrue(os.path.exists(os.path.join(job_dir, META_FILE)))
-            self.assertTrue(os.path.exists(os.path.join(job_dir, PARAMS_FILE)))
+            self.assertTrue(os.path.exists(os.path.join(job_dir, JOB_FILE)))
 
         self.assertEqual(len(os.listdir(DEFAULT_JOB_OUTPUT_DIR)), 0)
 
@@ -109,9 +111,9 @@ class MultipleRulesMultipleEventsTests(unittest.TestCase):
         for job in os.listdir(DEFAULT_JOB_QUEUE_DIR):
             job_dir = os.path.join(DEFAULT_JOB_QUEUE_DIR, job)
 
-            self.assertTrue(os.path.exists(os.path.join(job_dir, "base.ipynb")))
+            self.assertTrue(os.path.exists(os.path.join(job_dir, "recipe.ipynb")))
             self.assertTrue(os.path.exists(os.path.join(job_dir, META_FILE)))
-            self.assertTrue(os.path.exists(os.path.join(job_dir, PARAMS_FILE)))
+            self.assertTrue(os.path.exists(os.path.join(job_dir, JOB_FILE)))
 
         self.assertEqual(len(os.listdir(DEFAULT_JOB_OUTPUT_DIR)), 0)
     
@@ -182,9 +184,9 @@ class MultipleRulesSingleEventTests(unittest.TestCase):
         for job in os.listdir(DEFAULT_JOB_QUEUE_DIR):
             job_dir = os.path.join(DEFAULT_JOB_QUEUE_DIR, job)
 
-            self.assertTrue(os.path.exists(os.path.join(job_dir, "base.ipynb")))
+            self.assertTrue(os.path.exists(os.path.join(job_dir, "recipe.ipynb")))
             self.assertTrue(os.path.exists(os.path.join(job_dir, META_FILE)))
-            self.assertTrue(os.path.exists(os.path.join(job_dir, PARAMS_FILE)))
+            self.assertTrue(os.path.exists(os.path.join(job_dir, JOB_FILE)))
 
         self.assertEqual(len(os.listdir(DEFAULT_JOB_OUTPUT_DIR)), 0)
 
@@ -197,9 +199,9 @@ class MultipleRulesSingleEventTests(unittest.TestCase):
         for job in os.listdir(DEFAULT_JOB_QUEUE_DIR):
             job_dir = os.path.join(DEFAULT_JOB_QUEUE_DIR, job)
 
-            self.assertTrue(os.path.exists(os.path.join(job_dir, "base.ipynb")))
+            self.assertTrue(os.path.exists(os.path.join(job_dir, "recipe.ipynb")))
             self.assertTrue(os.path.exists(os.path.join(job_dir, META_FILE)))
-            self.assertTrue(os.path.exists(os.path.join(job_dir, PARAMS_FILE)))
+            self.assertTrue(os.path.exists(os.path.join(job_dir, JOB_FILE)))
 
         self.assertEqual(len(os.listdir(DEFAULT_JOB_OUTPUT_DIR)), 0)
  
@@ -268,9 +270,9 @@ class SingleRuleMultipleEventsTests(unittest.TestCase):
         for job in os.listdir(DEFAULT_JOB_QUEUE_DIR):
             job_dir = os.path.join(DEFAULT_JOB_QUEUE_DIR, job)
 
-            self.assertTrue(os.path.exists(os.path.join(job_dir, "base.ipynb")))
+            self.assertTrue(os.path.exists(os.path.join(job_dir, "recipe.ipynb")))
             self.assertTrue(os.path.exists(os.path.join(job_dir, META_FILE)))
-            self.assertTrue(os.path.exists(os.path.join(job_dir, PARAMS_FILE)))
+            self.assertTrue(os.path.exists(os.path.join(job_dir, JOB_FILE)))
 
         self.assertEqual(len(os.listdir(DEFAULT_JOB_OUTPUT_DIR)), 0)
 
@@ -283,9 +285,9 @@ class SingleRuleMultipleEventsTests(unittest.TestCase):
         for job in os.listdir(DEFAULT_JOB_QUEUE_DIR):
             job_dir = os.path.join(DEFAULT_JOB_QUEUE_DIR, job)
 
-            self.assertTrue(os.path.exists(os.path.join(job_dir, "base.ipynb")))
+            self.assertTrue(os.path.exists(os.path.join(job_dir, "recipe.ipynb")))
             self.assertTrue(os.path.exists(os.path.join(job_dir, META_FILE)))
-            self.assertTrue(os.path.exists(os.path.join(job_dir, PARAMS_FILE)))
+            self.assertTrue(os.path.exists(os.path.join(job_dir, JOB_FILE)))
 
         self.assertEqual(len(os.listdir(DEFAULT_JOB_OUTPUT_DIR)), 0)
  
@@ -360,9 +362,9 @@ class SingleRuleSingleEventParallelTests(unittest.TestCase):
         for job in os.listdir(DEFAULT_JOB_QUEUE_DIR):
             job_dir = os.path.join(DEFAULT_JOB_QUEUE_DIR, job)
 
-            self.assertTrue(os.path.exists(os.path.join(job_dir, "base.ipynb")))
+            self.assertTrue(os.path.exists(os.path.join(job_dir, "recipe.ipynb")))
             self.assertTrue(os.path.exists(os.path.join(job_dir, META_FILE)))
-            self.assertTrue(os.path.exists(os.path.join(job_dir, PARAMS_FILE)))
+            self.assertTrue(os.path.exists(os.path.join(job_dir, JOB_FILE)))
 
         self.assertEqual(len(os.listdir(DEFAULT_JOB_OUTPUT_DIR)), 0)
 
@@ -375,9 +377,9 @@ class SingleRuleSingleEventParallelTests(unittest.TestCase):
         for job in os.listdir(DEFAULT_JOB_QUEUE_DIR):
             job_dir = os.path.join(DEFAULT_JOB_QUEUE_DIR, job)
 
-            self.assertTrue(os.path.exists(os.path.join(job_dir, "base.ipynb")))
+            self.assertTrue(os.path.exists(os.path.join(job_dir, "recipe.ipynb")))
             self.assertTrue(os.path.exists(os.path.join(job_dir, META_FILE)))
-            self.assertTrue(os.path.exists(os.path.join(job_dir, PARAMS_FILE)))
+            self.assertTrue(os.path.exists(os.path.join(job_dir, JOB_FILE)))
 
         self.assertEqual(len(os.listdir(DEFAULT_JOB_OUTPUT_DIR)), 0)
  
@@ -448,11 +450,11 @@ class SingleRuleSingleEventSequentialTests(unittest.TestCase):
         for job in os.listdir(DEFAULT_JOB_OUTPUT_DIR):
             job_dir = os.path.join(DEFAULT_JOB_OUTPUT_DIR, job)
 
-            self.assertTrue(os.path.exists(os.path.join(job_dir, "base.ipynb")))
+            self.assertTrue(os.path.exists(os.path.join(job_dir, "recipe.ipynb")))
             self.assertTrue(os.path.exists(os.path.join(job_dir, "job.ipynb")))
             self.assertTrue(os.path.exists(os.path.join(job_dir, "result.ipynb")))
             self.assertTrue(os.path.exists(os.path.join(job_dir, META_FILE)))
-            self.assertTrue(os.path.exists(os.path.join(job_dir, PARAMS_FILE)))
+            self.assertTrue(os.path.exists(os.path.join(job_dir, JOB_FILE)))
 
         self.assertEqual(len(os.listdir(DEFAULT_JOB_QUEUE_DIR)), 0)
 
@@ -465,11 +467,11 @@ class SingleRuleSingleEventSequentialTests(unittest.TestCase):
         for job in os.listdir(DEFAULT_JOB_OUTPUT_DIR):
             job_dir = os.path.join(DEFAULT_JOB_OUTPUT_DIR, job)
 
-            self.assertTrue(os.path.exists(os.path.join(job_dir, "base.ipynb")))
+            self.assertTrue(os.path.exists(os.path.join(job_dir, "recipe.ipynb")))
             self.assertTrue(os.path.exists(os.path.join(job_dir, "job.ipynb")))
             self.assertTrue(os.path.exists(os.path.join(job_dir, "result.ipynb")))
             self.assertTrue(os.path.exists(os.path.join(job_dir, META_FILE)))
-            self.assertTrue(os.path.exists(os.path.join(job_dir, PARAMS_FILE)))
+            self.assertTrue(os.path.exists(os.path.join(job_dir, JOB_FILE)))
 
         self.assertEqual(len(os.listdir(DEFAULT_JOB_QUEUE_DIR)), 0)
  
