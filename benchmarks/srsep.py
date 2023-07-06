@@ -4,7 +4,7 @@ from meow_base.functionality.meow import create_parameter_sweep
 from meow_base.patterns import FileEventPattern
 from meow_base.recipes import get_recipe_from_notebook
 
-from benchmarks.shared import run_test, SRSEP
+from shared import run_test, SRSEP
 
 
 def single_rule_single_event_parallel(job_count:int, repeats:int, 

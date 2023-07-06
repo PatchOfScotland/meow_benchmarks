@@ -3,7 +3,7 @@ from meow_base.core.runner import MeowRunner
 from meow_base.patterns import FileEventPattern
 from meow_base.recipes import get_recipe_from_notebook
 
-from benchmarks.shared import run_test, SRME
+from shared import run_test, SRME
 
 
 def single_rule_multiple_events(job_count:int, repeats:int, job_counter:int,
