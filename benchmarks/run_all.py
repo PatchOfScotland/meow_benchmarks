@@ -10,13 +10,13 @@ from typing import List
 from meow_base.core.vars import DEFAULT_JOB_OUTPUT_DIR, DEFAULT_JOB_QUEUE_DIR
 from meow_base.functionality.file_io import rmtree
 
-from meow_benchmarks.benchmarks.shared import JOBS_COUNTS, TESTS, MRME, MRSE, SRME, SRSEP, \
+from benchmarks.shared import JOBS_COUNTS, TESTS, MRME, MRSE, SRME, SRSEP, \
     SRSES, RESULTS_DIR, BASE
-from meow_benchmarks.benchmarks.mrme import multiple_rules_multiple_events
-from meow_benchmarks.benchmarks.mrse import multiple_rules_single_event
-from meow_benchmarks.benchmarks.srme import single_rule_multiple_events
-from meow_benchmarks.benchmarks.srsep import single_rule_single_event_parallel
-from meow_benchmarks.benchmarks.srsps import single_rule_single_event_sequential
+from benchmarks.mrme import multiple_rules_multiple_events
+from benchmarks.mrse import multiple_rules_single_event
+from benchmarks.srme import single_rule_multiple_events
+from benchmarks.srsep import single_rule_single_event_parallel
+from benchmarks.srsps import single_rule_single_event_sequential
 
 
 LINE_KEYS = {
