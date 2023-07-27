@@ -63,6 +63,10 @@ benchmarks/job_output
 benchmarks/job_queue
 benchmarks/results/*
 results/*
+foam_analysis_benchmark/job_output
+foam_analysis_benchmark/job_queue
+foam_analysis_benchmark/test_monitor_base
+foam_analysis_benchmark/test_data
 
 # hdf5
 *.h5
